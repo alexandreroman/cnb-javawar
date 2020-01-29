@@ -29,8 +29,9 @@ public class GreetingsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/plain");
-        final PrintWriter out = new PrintWriter(resp.getOutputStream());
-        out.println("Hello world from Servlet!");
-        out.flush();
+        try (final PrintWriter out = new PrintWriter(resp.getOutputStream())) {
+            out.println("Hello world from Servlet!");
+            out.flush();
+        }
     }
 }

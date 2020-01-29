@@ -23,7 +23,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.HashMap;
 import java.util.Map;
 
 @Path("/info")
@@ -34,9 +33,9 @@ public class InfoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVersions() {
-        final Map<String, Object> info = new HashMap<>(2);
-        info.put("java", "Java " + System.getProperty("java.version"));
-        info.put("tomcat", context.getServerInfo());
-        return Response.ok(info).build();
+        return Response.ok(Map.of(
+                "java", "Java " + System.getProperty("java.version"),
+                "tomcat", context.getServerInfo()
+        )).build();
     }
 }
