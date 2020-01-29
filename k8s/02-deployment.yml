@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: cnb-javawar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cnb-javawar
+  template:
+    metadata:
+      labels:
+        app: cnb-javawar
+    spec:
+      containers:
+        - image: alexandreroman/cnb-javawar
+          imagePullPolicy: Always
+          name: app
+          resources:
+            limits:
+              memory: 1Gi
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /api/info
+            initialDelaySeconds: 60
+            periodSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8080
+              path: /api/info
+            initialDelaySeconds: 10
