@@ -23,7 +23,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Map;
+import java.util.TreeMap;
 
 @Path("/info")
 public class InfoResource {
@@ -33,9 +33,11 @@ public class InfoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getVersions() {
-        return Response.ok(Map.of(
-                "java", "Java " + System.getProperty("java.version"),
-                "tomcat", context.getServerInfo()
-        )).build();
+        // Use a TreeMap to sort entries, and get a consistent result.
+        final var info = new TreeMap<String, Object>();
+        info.put("java", "Java " + System.getProperty("java.version"));
+        info.put("os", System.getProperty("os.name") + " " + System.getProperty("os.version"));
+        info.put("tomcat", context.getServerInfo());
+        return Response.ok(info).build();
     }
 }
